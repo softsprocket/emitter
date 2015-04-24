@@ -65,7 +65,7 @@ class Emitter
 				@emissions[token][:p].slice! i
 			end
 
-			if i == @emissions[token][:p].length - 1	
+			if i >= @emissions[token][:p].length - 1	
 				while @emissions[token][:data].length > 0 do
 					data = @emissions[token][:data].shift 
 					p.call data
