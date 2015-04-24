@@ -7,8 +7,11 @@ emitter = Emitter.new
 emitter.on :hello_world, lambda { |data| puts "1: #{data}" }
 emitter.on :hello_world, lambda { |data| puts "2: #{data}" }
 
+emitter.once :hello_world, lambda { |data| puts "5: #{data}" }
+
 emitter.on :goodbye_world, lambda { |data| puts "3: #{data}" }
 emitter.on :goodbye_world, lambda { |data| puts "4: #{data}" }
+
 
 emitter.emit :hello_world, "Hello, brave Ruby World!"
 
