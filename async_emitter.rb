@@ -1,15 +1,15 @@
 require 'thread'
 
-class Emitter
+class AsyncEmitter
 =begin
-	The Emitter class provides a mechanism for asyncronous communication
+	The AsyncEmitter class provides a mechanism for asyncronous communication
 	in Ruby programs. Each instantiation provides notification of events
 	registered using any object that is valid as a Hash key. Multiple
 	events can be registered for each key and listeners can be registered 
 	for one or many events. Listeners for a key event can be released.
 
 	example:
-	emitter = Emitter.new
+	emitter = AsyncEmitter.new
 	emitter.on :error, lambda { |e| puts "Error: #{e}" }
 	emitter.on :data, lambda { |data| puts "Data: #{data}" }
 

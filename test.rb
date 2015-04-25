@@ -1,8 +1,8 @@
 #!/usr/bin/ruby
 
-require './emitter'
+require './async_emitter'
 
-emitter = Emitter.new
+emitter = AsyncEmitter.new
 
 emitter.on :hello_world, lambda { |data| puts "1: #{data}" }
 emitter.on :hello_world, lambda { |data| puts "2: #{data}" }
