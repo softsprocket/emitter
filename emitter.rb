@@ -1,12 +1,41 @@
 require 'thread'
 
 class Emitter
+=begin
+	The Emitter class provides a mechanism for asyncronous communication
+	in Ruby programs. Each instantiation provides notification of events
+	registered using any object that is valid as a Hash key. Multiple
+	events can be registered for each key and listeners can be registered 
+	for one or many events. Listeners for a key event can be released.
+
+	example:
+	emitter = Emitter.new
+	emitter.on :error, lambda { |e| puts "Error: #{e}" }
+	emitter.on :data, lambda { |data| puts "Data: #{data}" }
+
+	begin
+		data = get_data_from_somewhere
+		emitter.emit :data, data
+	rescue Exception => e
+		emitter.emit :error, e
+	end
+
+	Where more then one listener is registered for an event they are
+	notified in the order they are recieved.
+=end
 
 	def initialize
 		@emissions = {}
 	end
 
 
+	########################################################################
+	# Register for notification
+	#
+	# token - any valid Hash key representing the event
+	# p - a procedure to be called on notification
+	# once_only - if true the notification is removed after being fired once
+	# ######################################################################
 	def on (token, p, once_only=false)
 		@emissions[token] ||= {}
 		@emissions[token][:p] ||= []
@@ -34,6 +63,13 @@ class Emitter
 
 	end
 
+	########################################################################
+	# Register for single notification - convenience and self documenting
+	# method  for: on token, proc, true
+	#
+	# token - any valid Hash key representing the event
+	# p - a procedure to be called on notification
+	# ######################################################################
 	def once (token, p)
 		self.on token, p, true
 	end
@@ -50,6 +86,12 @@ class Emitter
 
 	end
 
+
+	########################################################################
+	# Remove notification for an event
+	#
+	# token - Hash key representing the event
+	########################################################################
 	def release (token)
 		@emissions[token][:active] = false
 		Thread.kill @emissions[token][:thread]
