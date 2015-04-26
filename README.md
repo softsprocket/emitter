@@ -1,7 +1,7 @@
 # Ruby AsyncEmitter Class
 ## Abstract
 
-[Link to the generated yard docs](http://htmlpreview.github.com/?https://github.com/softsprocket/emitter/blob/master/doc/frames.html)
+[Link to the generated yard docs](http://htmlpreview.github.io/?https://raw.githubusercontent.com/softsprocket/emitter/master/doc/frames.html)
 
 This is available as a gem as [async_emitter](https://rubygems.org/gems/async_emitter).
 
