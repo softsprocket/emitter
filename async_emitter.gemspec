@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name        = 'async_emitter'
-	s.version     = '1.0.0'
+	s.version     = '1.1.0'
 	s.date        = '2015-04-25'
 	s.summary     = "AsyncEmitter"
 	s.description = "An asyncronous emitter class for ruby"

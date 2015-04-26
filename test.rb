@@ -24,6 +24,6 @@ emitter.emit :goodbye_world, "Goodbye, brave Ruby World!"
 sleep 1
 
 emitter.release :hello_world
-emitter.release :goodbye_world
+emitter = nil
 
 

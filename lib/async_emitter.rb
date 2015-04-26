@@ -1,40 +1,42 @@
 require 'thread'
 
+####################################################################################
+# The AsyncEmitter class provides a mechanism for asyncronous communication
+# in Ruby programs. Each instantiation provides notification of events
+# registered using any object that is valid as a Hash key. Multiple
+# events can be registered for each key and listeners can be registered 
+# for one or many events. Listeners for a key event can be released.
+#
+# @example
+#	emitter = AsyncEmitter.new
+#	emitter.on :error, lambda { |e| puts "Error: #{e}" }
+#	emitter.on :data, lambda { |data| puts "Data: #{data}" }
+#
+#	begin
+#		data = get_data_from_somewhere
+#		emitter.emit :data, data
+#	rescue Exception => e
+#		emitter.emit :error, e
+#	end
+#
+# Where more then one listener is registered for an event they are
+# notified in the order they are recieved.
+#
+# @author Greg Martin
+####################################################################################
+
 class AsyncEmitter
-=begin
-	The AsyncEmitter class provides a mechanism for asyncronous communication
-	in Ruby programs. Each instantiation provides notification of events
-	registered using any object that is valid as a Hash key. Multiple
-	events can be registered for each key and listeners can be registered 
-	for one or many events. Listeners for a key event can be released.
-
-	example:
-	emitter = AsyncEmitter.new
-	emitter.on :error, lambda { |e| puts "Error: #{e}" }
-	emitter.on :data, lambda { |data| puts "Data: #{data}" }
-
-	begin
-		data = get_data_from_somewhere
-		emitter.emit :data, data
-	rescue Exception => e
-		emitter.emit :error, e
-	end
-
-	Where more then one listener is registered for an event they are
-	notified in the order they are recieved.
-=end
-
 	def initialize
 		@emissions = {}
 	end
 
-
 	########################################################################
 	# Register for notification
 	#
-	# token - any valid Hash key representing the event
-	# p - a procedure to be called on notification
-	# once_only - if true the notification is removed after being fired once
+	# @param token [Object] any valid Hash key representing the event
+	# @param p [Proc] a procedure to be called on notification
+	# @param once_only [Boolean] defualts to false,  if true the notification 
+	# 	is removed after being fired once
 	# ######################################################################
 	def on (token, p, once_only=false)
 		@emissions[token] ||= {}
@@ -67,8 +69,8 @@ class AsyncEmitter
 	# Register for single notification - convenience and self documenting
 	# method  for: on token, proc, true
 	#
-	# token - any valid Hash key representing the event
-	# p - a procedure to be called on notification
+	# @param token [Object] any valid Hash key representing the event
+	# @param p [Proc] a procedure to be called on notification
 	# ######################################################################
 	def once (token, p)
 		self.on token, p, true
@@ -78,8 +80,8 @@ class AsyncEmitter
 	#######################################################################
 	# Send notification of an event
 	#
-	# token - the Hash key representing the event
-	# data - argument to be passed to the events procedure
+	# @param token [Object] the Hash key representing the event
+	# @param data [Object] argument to be passed to the events procedure
 	# #####################################################################
 	def emit (token, data)
 		@emissions[token][:semaphore] ||= Mutex.new
@@ -97,11 +99,21 @@ class AsyncEmitter
 	########################################################################
 	# Remove notification for an event
 	#
-	# token - Hash key representing the event
+	# @param token [Object] Hash key representing the event
 	########################################################################
 	def release (token)
 		@emissions[token][:active] = false
 		Thread.kill @emissions[token][:thread]
+	end
+
+	########################################################################
+	# Remove all notifications
+	########################################################################
+	def release_all 
+		@emissions.each do |key, value|
+			value[:active] = false
+			Thread.kill value[:thread]
+		end
 	end
 
 	protected
