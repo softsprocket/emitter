@@ -7,7 +7,7 @@ require 'thread'
 # events can be registered for each key and listeners can be registered 
 # for one or many events. Listeners for a key event can be released.
 #
-# @example
+# +code+
 #	emitter = AsyncEmitter.new
 #	emitter.on :error, lambda { |e| puts "Error: #{e}" }
 #	emitter.on :data, lambda { |data| puts "Data: #{data}" }
@@ -18,7 +18,7 @@ require 'thread'
 #	rescue Exception => e
 #		emitter.emit :error, e
 #	end
-#
+# +code+
 # Where more then one listener is registered for an event they are
 # notified in the order they are recieved.
 #
