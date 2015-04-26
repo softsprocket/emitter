@@ -74,6 +74,13 @@ class AsyncEmitter
 		self.on token, p, true
 	end
 
+
+	#######################################################################
+	# Send notification of an event
+	#
+	# token - the Hash key representing the event
+	# data - argument to be passed to the events procedure
+	# #####################################################################
 	def emit (token, data)
 		@emissions[token][:semaphore] ||= Mutex.new
 		@emissions[token][:cv] ||= ConditionVariable.new 
