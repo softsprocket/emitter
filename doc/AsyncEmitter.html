@@ -108,26 +108,16 @@ registered using any object that is valid as a Hash key. Multiple events
 can be registered for each key and listeners can be registered  for one or
 many events. Listeners for a key event can be released.</p>
 
-<p>emitter = AsyncEmitter.new</p>
-
-<p>emitter.on :error, lambda { |e| puts "Error: #e" }</p>
-
-<p>emitter.on :data, lambda { |data| puts "Data: #data" }</p>
-
-<p>begin</p>
-
-<p>data = get_data_from_somewhere</p>
-
-<p>emitter.emit :data, data</p>
-
-<p>rescue Exception =&gt; e</p>
-
-<p>emitter.emit :error, e</p>
-
-<p>end</p>
-
 <p>Where more then one listener is registered for an event they are notified
 in the order they are recieved.</p>
+
+<h2>Example</h2>
+
+<p>emitter = AsyncEmitter.new emitter.on :error, lambda { |e| puts "Error:
+#e" } emitter.on :data, lambda { |data| puts "Data: #data" }</p>
+
+<p>begin 	data = get_data_from_somewhere 	emitter.emit :data, data rescue
+Exception =&gt; e 	emitter.emit :error, e end</p>
 
 
   </div>
@@ -345,12 +335,12 @@ for: on token, proc, true.</p>
       <pre class="lines">
 
 
-39
-40
-41</pre>
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 28</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
 	<span class='ivar'>@emissions</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -431,20 +421,20 @@ for: on token, proc, true.</p>
       <pre class="lines">
 
 
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106</pre>
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 96</span>
+      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 85</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_emit'>emit</span> <span class='lparen'>(</span><span class='id identifier rubyid_token'>token</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
 	<span class='ivar'>@emissions</span><span class='lbracket'>[</span><span class='id identifier rubyid_token'>token</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:semaphore</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='const'>Mutex</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -545,6 +535,17 @@ once</p>
       <pre class="lines">
 
 
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
 51
 52
 53
@@ -559,21 +560,10 @@ once</p>
 62
 63
 64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76</pre>
+65</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 40</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_on'>on</span> <span class='lparen'>(</span><span class='id identifier rubyid_token'>token</span><span class='comma'>,</span> <span class='id identifier rubyid_p'>p</span><span class='comma'>,</span> <span class='id identifier rubyid_once_only'>once_only</span><span class='op'>=</span><span class='kw'>false</span><span class='rparen'>)</span>
 	<span class='ivar'>@emissions</span><span class='lbracket'>[</span><span class='id identifier rubyid_token'>token</span><span class='rbracket'>]</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -671,12 +661,12 @@ for: on token, proc, true</p>
       <pre class="lines">
 
 
-85
-86
-87</pre>
+74
+75
+76</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 85</span>
+      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 74</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_once'>once</span> <span class='lparen'>(</span><span class='id identifier rubyid_token'>token</span><span class='comma'>,</span> <span class='id identifier rubyid_p'>p</span><span class='rparen'>)</span>
 	<span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_on'>on</span> <span class='id identifier rubyid_token'>token</span><span class='comma'>,</span> <span class='id identifier rubyid_p'>p</span><span class='comma'>,</span> <span class='kw'>true</span>
@@ -732,13 +722,13 @@ for: on token, proc, true</p>
       <pre class="lines">
 
 
-114
-115
-116
-117</pre>
+103
+104
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 114</span>
+      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 103</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span> <span class='lparen'>(</span><span class='id identifier rubyid_token'>token</span><span class='rparen'>)</span>
 	<span class='ivar'>@emissions</span><span class='lbracket'>[</span><span class='id identifier rubyid_token'>token</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:active</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>false</span>
@@ -775,15 +765,15 @@ for: on token, proc, true</p>
       <pre class="lines">
 
 
-122
-123
-124
-125
-126
-127</pre>
+111
+112
+113
+114
+115
+116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/async_emitter.rb', line 111</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release_all'>release_all</span> 
 	<span class='ivar'>@emissions</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span>
@@ -801,7 +791,7 @@ for: on token, proc, true</p>
 </div>
 
     <div id="footer">
-  Generated on Sun Apr 26 10:37:09 2015 by
+  Generated on Sun Apr 26 11:08:25 2015 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.6 (ruby-1.9.3).
 </div>
