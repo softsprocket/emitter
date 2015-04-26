@@ -1,18 +1,20 @@
-# Ruby Emitter Class
+# Ruby AsyncEmitter Class
 ## Abstract
 
 This code was written primarily as an exercise. I have looked at the Ruby programming language with my peripheral vision for many years but not had a reason to actually use it. One of the features I like about nodejs is it's emitters; they allow for efficient use of asynchronous IO. This is something that may well exist in Ruby, I am not sufficiently versed in it to know, but I thought it a reasonable learning experience and a chance to evaluate Ruby first hand.
 
 The code itself makes use of the Ruby thread module and allows listeners tobe associated with emitted objects. A listener can listen for one event or many and many listeners can be associated with one event. They will be chained in the order they are registered in. 
 
-### Emitter
+I've decided to tun this into a gem so am making changes required for that.
+
+### AsyncEmitter
 #### Sample Usage
 
 ```ruby
 
-require './emitter'
+require 'async_emitter'
 
-emitter = Emitter.new
+emitter = AsyncEmitter.new
 
 emitter.on :hello_world, lambda { |data| puts "1: #{data}" }
 

@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-require './async_emitter'
+require './lib/async_emitter'
 
 emitter = AsyncEmitter.new
 
