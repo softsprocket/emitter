@@ -11,16 +11,18 @@ require 'thread'
 # notified in the order they are recieved.
 #
 # == Example
-#	emitter = AsyncEmitter.new
-#	emitter.on :error, lambda { |e| puts "Error: #{e}" }
-#	emitter.on :data, lambda { |data| puts "Data: #{data}" }
 #
-#	begin
-#		data = get_data_from_somewhere
-#		emitter.emit :data, data
-#	rescue Exception => e
-#		emitter.emit :error, e
-#	end
+#    emitter = AsyncEmitter.new
+#    emitter.on :error, lambda { |e| puts "Error: #{e}" }
+#    emitter.on :data, lambda { |data| puts "Data: #{data}" }
+#    
+#    begin
+#        data = get_data_from_somewhere
+#        emitter.emit :data, data
+#    rescue Exception => e
+#        emitter.emit :error, e
+#    end
+#    
 # @author Greg Martin
 ####################################################################################
 
@@ -121,16 +123,13 @@ class AsyncEmitter
 			o = @emissions[token][:p][i][:o]
 		       	p = @emissions[token][:p][i][:p]
 			
-			if o
-				@emissions[token][:p].slice! i
-			end
-
 			if i >= @emissions[token][:p].length - 1	
 				while @emissions[token][:data].length > 0 do
 					data = @emissions[token][:data].shift 
 					p.call data
 					if o 
 						@emissions[token][:data] = []
+						@emissions[token][:p].slice! i
 						break
 					end
 				end
@@ -138,11 +137,12 @@ class AsyncEmitter
 				@emissions[token][:data].each do |data|
 					p.call data
 					if o 
+						@emissions[token][:p].slice! i
 						break
 					end
 				end
 			end
-
+			
 		end
 	end
 end
